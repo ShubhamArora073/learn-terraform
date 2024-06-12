@@ -27,3 +27,33 @@ variable "zoneb_private_subnet_cidr_block" {
     description = "secondary Zone B private subnet"
     default = "192.168.4.0/24"
 }
+
+variable "ami_map" {
+    description = "Mapping of AMIs"
+    type = map(string)
+    default = {
+        "dev"  = "ami-00cf59bc9978eb266"
+        "prod" = "ami-01e444924a2233b07"
+    }
+}
+
+variable "env" {
+  description = "The environment to deploy (e.g., dev, prod)"
+  type        = string
+  default     = "dev"
+}
+
+# variable "ami" {
+#     description = "Image for ASG"
+#     default = "ami-01e444924a2233b07"
+# }
+
+variable "instance_type" {
+    description = "Instance type for asg"
+    default = "t2.micro"
+}
+
+variable "key_name" {
+    description = "Key for Instances in ASG"
+    default = "kp"
+}
