@@ -172,3 +172,41 @@ ex:
     vpc_security_group_ids = [aws_security_group.main_sg.id]
     #user_data              = filebase64("./apache.sh")
   }
+
+##################################################################################################################
+# Dynamic Blocks
+##################################################################################################################
+
+  variable "ingress_ports" {
+  type = list(number)
+  default = [ 80, 443, 22, 3389 ]
+}
+
+variable "egress_ports" {
+  type = list(number)
+  default = [ 80, 443, 22, 3389 ]
+}
+
+
+resource "aws_security_group" "main_sg" {
+  name        = "main_sg"
+  dynamic "ingress" {
+    for_each = var.ingress_ports
+    content {
+      cidr_blocks       = ["0.0.0.0/0"]
+      from_port         = ingress.value
+      protocol          = "tcp"
+      to_port           = ingress.value
+    }
+  }
+
+  dynamic "egress" {
+    for_each = var.egress_ports
+    content {
+      cidr_blocks       = ["0.0.0.0/0"]
+      from_port         = egress.value
+      protocol          = "tcp"
+      to_port           = egress.value
+    }
+  }
+}
